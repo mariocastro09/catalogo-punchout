@@ -1,0 +1,126 @@
+# ============================================================
+# docker-compose.prod.yml — Punchout B2B Catalog
+# Used by Coolify for production deployment.
+# DO NOT use dev volume bind-mounts here.
+# ============================================================
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: punchout-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - punchout-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: punchout-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - punchout-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  medusa:
+    build:
+      context: ./medusa
+      dockerfile: Dockerfile
+    container_name: punchout-medusa
+    restart: unless-stopped
+    expose:
+      - "9000"
+      - "7001"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      STORE_CORS: ${STORE_CORS}
+      ADMIN_CORS: ${ADMIN_CORS}
+      AUTH_CORS: ${AUTH_CORS}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - punchout-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9000/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  fastapi:
+    build:
+      context: ./fastapi
+      dockerfile: Dockerfile
+    container_name: punchout-fastapi
+    restart: unless-stopped
+    expose:
+      - "8000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      MEDUSA_BACKEND_URL: http://medusa:9000
+      STOREFRONT_PUBLIC_URL: ${STOREFRONT_PUBLIC_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
+    depends_on:
+      medusa:
+        condition: service_healthy
+    networks:
+      - punchout-network
+
+  storefront:
+    build:
+      context: ./medusa-storefront
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${NEXT_PUBLIC_MEDUSA_BACKEND_URL}
+        NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+        NEXT_PUBLIC_DEFAULT_REGION: ${NEXT_PUBLIC_DEFAULT_REGION}
+    container_name: punchout-storefront
+    restart: unless-stopped
+    expose:
+      - "8000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${NEXT_PUBLIC_MEDUSA_BACKEND_URL}
+      MEDUSA_BACKEND_URL: http://medusa:9000
+      NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+      NEXT_PUBLIC_DEFAULT_REGION: ${NEXT_PUBLIC_DEFAULT_REGION}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      medusa:
+        condition: service_healthy
+    networks:
+      - punchout-network
+
+volumes:
+  postgres-data:
+  redis-data:
+
+
+networks:
+  punchout-network:
+    driver: bridge

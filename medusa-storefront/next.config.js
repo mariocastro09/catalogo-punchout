@@ -14,6 +14,7 @@ const MEDUSA_INTERNAL_URL = process.env.MEDUSA_BACKEND_URL || "http://localhost:
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
+  output: "standalone",
   reactStrictMode: true,
   logging: {
     fetches: {
