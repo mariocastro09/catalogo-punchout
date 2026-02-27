@@ -1,0 +1,67 @@
+# ============================================================
+# ROOT .gitignore — Punchout B2B Catalog Monorepo
+# ============================================================
+
+# ─── Environment & Secrets ───────────────────────────────────
+.env
+.env.local
+.env.production
+.env.*.local
+!.env.example
+
+# ─── OS & Editor ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Node / Bun (medusa + medusa-storefront) ──────────────────
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+**/.cache/
+**/coverage/
+**/*.tsbuildinfo
+yarn-error.log
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# ─── Medusa specific ─────────────────────────────────────────
+medusa/.medusa/
+medusa/uploads/
+medusa/medusa-db.sql
+medusa/.env.test
+
+# ─── Python / FastAPI ─────────────────────────────────────────
+fastapi/__pycache__/
+fastapi/*.pyc
+fastapi/*.pyo
+fastapi/*.pyd
+fastapi/.Python
+fastapi/venv/
+fastapi/.venv/
+fastapi/*.egg-info/
+fastapi/dist/
+fastapi/htmlcov/
+fastapi/.pytest_cache/
+fastapi/.mypy_cache/
+fastapi/.ruff_cache/
+**/__pycache__/
+**/*.py[cod]
+
+# ─── Docker ───────────────────────────────────────────────────
+# (keep Dockerfiles and docker-compose.yml committed)
+
+# ─── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

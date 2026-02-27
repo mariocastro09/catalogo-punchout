@@ -1,0 +1,206 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DoC Tool</title>
+    <meta name="description" content="Declaration of Conformity Tool">
+    <meta name="keywords" content="Honeywewll, DoC, Tool, Declaration, Conformity, honeywellsafety">
+    <meta name="author" content="Honeywell">
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- OneTrust Cookies Consent Notice start -->
+    <!-- OneTrust Cookies Consent Notice start for honeywellsafety.com -->
+    <!--<script type="text/javascript" src="https://cdn.cookielaw.org/consent/cded3ab2-c2e5-4cc7-89af-50e8279433d4/OtAutoBlock.js"></script>-->
+    <!--<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="cded3ab2-c2e5-4cc7-89af-50e8279433d4"></script>-->
+    <!--<script type="text/javascript">-->
+    <!--function OptanonWrapper() { }-->
+    <!--</script>-->
+    <!-- OneTrust New DEV Cookies Consent Notice end for honeywellsafety.com -->
+    <!-- OneTrust New DEV Cookies Consent Notice end -->
+    <!-- OneTrust New DEV Cookies Consent Notice start -->
+    <!-- OneTrust New DEV Cookies Consent Notice start for honeywellsafety.com -->
+    <!--<script type="text/javascript" src="https://cdn.cookielaw.org/consent/2616aca8-181d-40a3-b1c6-d0b2a9fa9f1c-test/OtAutoBlock.js"></script>-->
+    <!--<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="2616aca8-181d-40a3-b1c6-d0b2a9fa9f1c-test"></script>-->
+    <!--<script type="text/javascript">-->
+    <!--function OptanonWrapper() { }-->
+    <!--</script>-->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice end for honeywellsafety.com -->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice end -->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice end for honeywellsafety.com -->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice end -->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice start -->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice start for honeywellsafety.com -->
+    <!-- <script type="text/javascript" src="https://cdn.cookielaw.org/consent/2616aca8-181d-40a3-b1c6-d0b2a9fa9f1c/OtAutoBlock.js"></script>
+    <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="2616aca8-181d-40a3-b1c6-d0b2a9fa9f1c"></script>
+    <script type="text/javascript">
+
+        function OptanonWrapper() { }
+
+    </script>-->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice end for honeywellsafety.com -->
+    <!-- OneTrust New QA/PROD Cookies Consent Notice end -->
+
+    <link rel="stylesheet" href="/lib/chosen-js/chosen.min.css">
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/Default.min.css">
+    <link rel="stylesheet" href="/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" type="text/css" href="https://eubanner.honeywell.com/css/Banner.css" />
+
+
+    
+        <link rel="stylesheet" href="/css/Style.min.css?version=v1.1.4.0">
+    
+
+    
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/angular/angular.min.js"></script>
+    <script src="/lib/chosen-js/chosen.jquery.js"></script>
+    <script src="/lib/angular-chosen-localytics/dist/angular-chosen.js"></script>
+
+
+
+<script>(window.BOOMR_mq=window.BOOMR_mq||[]).push(["addVar",{"rua.upush":"false","rua.cpush":"false","rua.upre":"false","rua.cpre":"false","rua.uprl":"false","rua.cprl":"false","rua.cprf":"false","rua.trans":"","rua.cook":"false","rua.ims":"false","rua.ufprl":"false","rua.cfprl":"false","rua.isuxp":"false","rua.texp":"norulematch","rua.ceh":"false","rua.ueh":"false","rua.ieh.st":"0"}]);</script>
+                              <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="H5PEZ-ULFM9-LM6PF-VGNSJ-TEBRQ",function(){function e(){if(!o){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,i.parentNode.appendChild(e),o=!0}}function t(e){o=!0;var n,t,a,r,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(i.parentNode,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",r=(a.frameElement||a).style,r.width=0,r.height=0,r.border=0,r.display="none",i.parentNode.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void(0);",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=12,window.BOOMR.url=n+"H5PEZ-ULFM9-LM6PF-VGNSJ-TEBRQ";var i=document.currentScript||document.getElementsByTagName("script")[0],o=!1,r=document.createElement("link");if(r.relList&&"function"==typeof r.relList.supports&&r.relList.supports("preload")&&"as"in r)window.BOOMR.snippetMethod="p",r.href=window.BOOMR.url,r.rel="preload",r.as="script",r.addEventListener("load",e),r.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!o)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),i.parentNode.appendChild(r);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="xzzcgyyxbzdok2m7237a-f-c24661453-clientnsv4-s.akamaihd.net",i="false"=="true"?2:1,o={"ak.v":"39","ak.cp":"1483752","ak.ai":parseInt("914115",10),"ak.ol":"0","ak.cr":3,"ak.ipv":4,"ak.proto":"http/1.1","ak.rid":"5b65ad56","ak.r":47566,"ak.a2":n,"ak.m":"dsca","ak.n":"essl","ak.bpcip":"190.114.35.0","ak.cport":22658,"ak.gh":"23.213.29.45","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"bbr","ak.t":"1772082942","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==gefmldanMXy3X0s0nemJSXxS/6G296DPSVdTlzx7nXqtbG4mmfkaeUPQlIG1Kt/4sfUG/wXjMccbXwgE7onh7Ioyn5CrBD0DcfupvWsdv9GivV1s82O+2kLjZGwYwjcoEPYf3fVtj84Dx1ZZLFr4WNWb7pvnKAZxyCvG0kaHKK131srbxgHBS5qMFO+7Fr3XYgQZdh2gzDoKs4n0/PoWWOBjJ9ns5I6UEkqtOA5A2wLJ9E1N47KwaNt2CewGn3bN67yc+QBRMRAhP7qFBWJu9r4aTYGAhKPo3MGuYqkj1yClXBzqp+AHnQw7GXTzRMjTyVmX9xgJwa5r2JyPBl6RsN1qK4Iisjukvz+uIWsGqzynCGwgbnebMu/JZe9fxdtUwbWBsR+ScVgfWqxd2cNi93UzvUPH3yhap01Ppd8bpao=","ak.pv":"196","ak.dpoabenc":"","ak.tf":i};if(""!==t)o["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))o["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(o)},rv:function(){var e=["ak.bpcip","ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:o,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+
+
+
+
+<body class="hold-transition skin-blue sidebar-mini" ng-app="HONDTS" ng-cloak>
+
+
+
+    <!--<div id="HoneywellEUCookie-Banner">
+        <div>
+            <span id="HoneywellEUCookie-BannerText"></span>
+            <a id="HoneywellEUCookie-PrivacyLink" target="_blank">
+                <span id="HoneywellEUCookie-PrivacyText"></span>
+            </a>
+        </div>
+        <div id="HoneywellEUCookie-ConsentButtonDiv">
+            <button type="submit" id="HoneywellEUCookie-CookieDismiss"></button>
+
+
+        </div>
+    </div>-->
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                euCookieImplementationRun("en-GB","doc.honeywellsafety.com");
+            });
+        </script>
+
+
+
+
+    <div class="wrapper public-page" ng-controller="PublicAccessCtrl">
+        <div class="content-wrapper first-public-page">
+            <div ng-show="loading" class="loading-panel first-page">
+                <div class="loading-icon-container">
+                    <img src="/images/Loader.svg" />
+                </div>
+            </div>
+            <section class="modal-section-container">
+                <div class="modal-section">
+                    <div class="row">
+                        <div class="central-section">
+                            <div class="logo-container">
+                                <figure>
+                                    <img src="/images/pip-hsp-top-nav-logo[81].png" />
+                                </figure>
+                            </div>
+                            <div class="modal-element">
+<form action="/" method="post" name="accessForm">                                    <div class="single-element-container" ng-class="{'has-error' : countryIsInvalid && countrySelected == null}">
+                                        <div class="element-label">
+                                            <p class="label"><span>Select Country</span></p>
+                                        </div>
+                                        <div class="element-select with-search">
+                                            <select chosen
+                                                    ng-required="true"
+                                                    placeholder-text-single="'Select a country'"
+                                                    data-placeholder="Select a country"
+                                                    disable-search="false"
+                                                    ng-model="countrySelected"
+                                                    ng-init="countrySelected = null"
+                                                    ng-options="country.code as country.name for country in countriesList track by country.code">
+                                                <option value="" disabled selected>Select a country</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="single-element-error">
+                                            <p class="error-label"><span>Select a country</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="single-element-container with-padding-bottom" ng-class="{'has-error' : languageIsInvalid && selectedLanguage == null}">
+                                        <div class="element-label">
+                                            <p class="label"><span>Select a Language</span></p>
+                                        </div>
+                                        <div class="element-select">
+                                            <select chosen
+                                                    ng-required="false"
+                                                    placeholder-text-single="'Select a language'"
+                                                    data-placeholder="Select a language"
+                                                    disable-search="false"
+                                                    ng-model="selectedLanguage"
+                                                    ng-init="selectedLanguage = null"
+                                                    ng-options="language.code as language.languageName for language in languagesList track by language.code">
+                                                <option value="" disabled selected>Select a language</option>
+                                            </select>
+                                        </div>
+                                        <div class="single-element-error">
+                                            <p class="error-label"><span>Select a language</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="button-group-container">
+                                        <div class="button-container full-width">
+                                            <button type="button" ng-click="validate(countrySelected,selectedLanguage)" class="btn button-blue">ENTER</button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8NMSCQGj4txPqMMCJSwoHnJH_8fG3fauwoqSae4lEy9PFhbnpUWv-ivLNnMfWNIlDYc7owjaA7S7X1cXiTbFQjhqc6LEvIgRgJFzBwxj1e6yXjUAWndnNrqryjlGvPX3w2OeB14EufQYN0tcFRHDfPo" /></form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+
+
+
+    
+        <script src="https://eubanner.honeywell.com/javascript/HON.EuCookieCompliance.min.js"></script>
+        <script src="/app/DocTool/Controller/PublicAccessCtrl.es5.min.js?version=v1.1.4.0"></script>
+        <script src="/app/DocTool/Service/PublicAreaFactory.es5.min.js?version=v1.1.4.0"></script>
+    
+    
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118080735-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-118080735-1');
+    </script>
+
+
+
+
+</body>
+</html>
