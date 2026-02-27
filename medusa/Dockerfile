@@ -36,7 +36,5 @@ COPY --from=builder /app/static ./static
 
 EXPOSE 9000 7001
 
-# FIX 1: Use node_modules/.bin/medusa directly for db:migrate
-#         (there is no 'db:migrate' npm script in package.json)
-# FIX 2: Added set -e so any failure exits immediately with a clear error
-CMD ["sh", "-c", "set -e && node_modules/.bin/medusa db:migrate && bun run start"]
+# Diagnostic CMD — prints each step so we can see what fails in logs
+CMD ["sh", "-c", "echo '=== Starting Medusa ===' && echo '=== DATABASE_URL prefix ===' && echo $DATABASE_URL | cut -c1-30 && echo '=== Running db:migrate ===' && node_modules/.bin/medusa db:migrate && echo '=== Migration done, starting server ===' && bun run start && echo '=== Server exited ==='"]
