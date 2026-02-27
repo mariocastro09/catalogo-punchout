@@ -33,7 +33,13 @@ COPY --from=builder /app/static ./static
 # .ts files at runtime. tsconfig.json is needed for path resolution.
 COPY --from=builder /app/medusa-config.ts ./medusa-config.ts
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/package.json ./package.json
+
+# Add entrypoint script
+COPY docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
 
 EXPOSE 9000 7001
 
-CMD ["sh", "-c", "set -e && node_modules/.bin/medusa db:migrate && bun run start"]
+ENTRYPOINT ["sh", "./docker-entrypoint.sh"]
+

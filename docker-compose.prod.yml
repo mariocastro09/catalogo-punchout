@@ -22,7 +22,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data-v2:/var/lib/postgresql/data
     networks:
       - punchout-network
     healthcheck:
@@ -39,7 +39,7 @@ services:
     container_name: punchout-redis
     restart: unless-stopped
     volumes:
-      - redis-data:/data
+      - redis-data-v2:/data
     networks:
       - punchout-network
     healthcheck:
@@ -59,7 +59,7 @@ services:
       context: ./medusa
       dockerfile: Dockerfile
     container_name: punchout-medusa
-    restart: unless-stopped
+    restart: always
     expose:
       - "9000"
       - "7001"
@@ -75,6 +75,10 @@ services:
       STORE_CORS: ${SERVICE_FQDN_STOREFRONT}
       ADMIN_CORS: ${SERVICE_FQDN_MEDUSA}
       AUTH_CORS: ${SERVICE_FQDN_STOREFRONT},${SERVICE_FQDN_MEDUSA},${SERVICE_FQDN_FASTAPI}
+      # Internal framework resilience
+      __MEDUSA_DB_CONNECTION_MAX_RETRIES: "10"
+      __MEDUSA_DB_CONNECTION_RETRY_DELAY: "5000"
+
     depends_on:
       db:
         condition: service_healthy
@@ -87,7 +91,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 120s # First boot runs migrations — needs extra time
+      start_period: 240s # First boot runs migrations — needs extra time
 
   # ────────────────────────────────────────────────────────────
   # FastAPI — cXML/OCI Punchout middleware
@@ -155,17 +159,11 @@ services:
     networks:
       - punchout-network
 
-# ────────────────────────────────────────────────────────────
-# Volumes — persisted across container restarts
-# ────────────────────────────────────────────────────────────
 volumes:
-  postgres-data:
-  redis-data:
+  postgres-data-v2:
+  redis-data-v2:
 
-    # ────────────────────────────────────────────────────────────
-    # Network — all services communicate internally
-    # Coolify's Traefik sits outside this network for ingress
-    # ────────────────────────────────────────────────────────────
+
 networks:
   punchout-network:
     driver: bridge

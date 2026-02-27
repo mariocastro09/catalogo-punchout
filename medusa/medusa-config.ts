@@ -5,9 +5,16 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
-    // No SSL override — internal Docker networking does not need SSL.
-    // SSL mode is handled via ?sslmode=disable in DATABASE_URL.
-
+    databaseDriverOptions: {
+      pool: {
+        min: 2,
+        max: 10,
+        acquireTimeoutMillis: 60000,
+        createTimeoutMillis: 30000,
+        idleTimeoutMillis: 30000,
+      },
+    } as any,
+    workerMode: (process.env.MEDUSA_WORKER_MODE as any) || "shared",
     redisUrl: process.env.REDIS_URL,
     http: {
       storeCors: process.env.STORE_CORS!,
@@ -15,7 +22,11 @@ module.exports = defineConfig({
       authCors: process.env.AUTH_CORS!,
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
+      compression: {
+        enabled: true
+      },
     }
+
   },
   admin: {
     vite: (config) => {
