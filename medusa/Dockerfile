@@ -24,17 +24,16 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Only copy what medusa needs to run in production:
-# - node_modules  → CLI + runtime deps
-# - .medusa/      → compiled server (from 'medusa build')
-# - package.json  → for 'bun run start' script lookup
-# - static/       → file uploads served by medusa
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.medusa ./.medusa
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/static ./static
+# The Medusa CLI (db:migrate + start) always looks for medusa-config
+# at the project root. It uses @cspotcode/source-map-support to load
+# .ts files at runtime. tsconfig.json is needed for path resolution.
+COPY --from=builder /app/medusa-config.ts ./medusa-config.ts
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 EXPOSE 9000 7001
 
-# Diagnostic CMD — prints each step so we can see what fails in logs
-CMD ["sh", "-c", "echo '=== Starting Medusa ===' && echo '=== DATABASE_URL prefix ===' && echo $DATABASE_URL | cut -c1-30 && echo '=== Running db:migrate ===' && node_modules/.bin/medusa db:migrate && echo '=== Migration done, starting server ===' && bun run start && echo '=== Server exited ==='"]
+CMD ["sh", "-c", "set -e && node_modules/.bin/medusa db:migrate && bun run start"]
