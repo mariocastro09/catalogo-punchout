@@ -2,6 +2,10 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import ChevronDown from "@modules/common/icons/chevron-down"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 
+// Force all pages in (checkout) route group to be server-rendered on demand.
+// Prevents Next.js from calling Medusa SDK at build time → ERR_INVALID_URL / ByteString errors.
+export const dynamic = "force-dynamic"
+
 export default function CheckoutLayout({
   children,
 }: {

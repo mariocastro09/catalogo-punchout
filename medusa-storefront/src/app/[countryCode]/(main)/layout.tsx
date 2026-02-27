@@ -9,6 +9,11 @@ import Footer from "@modules/layout/templates/footer"
 import Nav from "@modules/layout/templates/nav"
 import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
 
+// Force all pages in the (main) route group to be server-rendered on demand.
+// This prevents Next.js from trying to statically generate any page during
+// Docker build, when the Medusa backend is not running.
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
 }

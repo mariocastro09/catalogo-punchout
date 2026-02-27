@@ -6,6 +6,8 @@ import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Checkout",
 }
