@@ -87,7 +87,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 90s # Medusa takes time to migrate on first boot
+      start_period: 120s # First boot runs migrations — needs extra time
 
   # ────────────────────────────────────────────────────────────
   # FastAPI — cXML/OCI Punchout middleware

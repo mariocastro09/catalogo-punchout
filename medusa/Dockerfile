@@ -15,6 +15,7 @@ RUN bun install --frozen-lockfile
 # ── Build ────────────────────────────────────────────────────
 FROM deps AS builder
 COPY . .
+# 'medusa build' compiles everything into .medusa/server/
 RUN bun run build
 
 # ── Production image ─────────────────────────────────────────
@@ -23,14 +24,19 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Only copy what medusa needs to run in production:
+# - node_modules  → CLI + runtime deps
+# - .medusa/      → compiled server (from 'medusa build')
+# - package.json  → for 'bun run start' script lookup
+# - static/       → file uploads served by medusa
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.medusa ./.medusa
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/medusa-config.ts ./medusa-config.ts
-COPY --from=builder /app/src ./src
 COPY --from=builder /app/static ./static
 
 EXPOSE 9000 7001
 
-# Run DB migrations then start; on Coolify the healthcheck gives time to settle
-CMD ["sh", "-c", "bun run medusa db:migrate && bun run start"]
+# FIX 1: Use node_modules/.bin/medusa directly for db:migrate
+#         (there is no 'db:migrate' npm script in package.json)
+# FIX 2: Added set -e so any failure exits immediately with a clear error
+CMD ["sh", "-c", "set -e && node_modules/.bin/medusa db:migrate && bun run start"]
