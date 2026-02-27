@@ -7,18 +7,7 @@ module.exports = defineConfig({
     databaseUrl: process.env.DATABASE_URL,
     // No SSL override — internal Docker networking does not need SSL.
     // SSL mode is handled via ?sslmode=disable in DATABASE_URL.
-    databaseDriverOptions: {
-      connection: {
-        // Explicit connection pool settings to avoid Knex timeout on first boot
-        pool: {
-          min: 2,
-          max: 10,
-          acquireTimeoutMillis: 60000,
-          createTimeoutMillis: 30000,
-          idleTimeoutMillis: 30000,
-        },
-      },
-    },
+
     redisUrl: process.env.REDIS_URL,
     http: {
       storeCors: process.env.STORE_CORS!,
