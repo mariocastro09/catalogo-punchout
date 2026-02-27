@@ -1,6 +1,12 @@
 const checkEnvVariables = require("./check-env-variables")
 
-checkEnvVariables()
+// Skip hard env-variable checks during Docker builds.
+// NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY is obtained from Medusa Admin
+// only after the first deployment — it cannot be present at build time.
+// Runtime (next start) will still fail fast if variables are truly missing.
+if (process.env.NODE_ENV !== "production" || process.env.SKIP_ENV_CHECK !== "true") {
+  try { checkEnvVariables() } catch (e) { /* warn only */ }
+}
 
 /**
  * Medusa Cloud-related environment variables

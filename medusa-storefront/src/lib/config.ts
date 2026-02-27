@@ -1,17 +1,26 @@
 import { getLocaleHeader } from "@lib/util/get-locale-header"
 import Medusa, { FetchArgs, FetchInput } from "@medusajs/js-sdk"
 
-// Defaults to standard port for Medusa server
-let MEDUSA_BACKEND_URL = "http://localhost:9000"
+// The Medusa backend URL used for Server-Side Rendering (internal Docker network call).
+// Falls back to the public URL if the internal one isn't set.
+let MEDUSA_BACKEND_URL =
+  process.env.MEDUSA_BACKEND_URL ||
+  process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL ||
+  "http://localhost:9000"
 
-if (process.env.MEDUSA_BACKEND_URL) {
-  MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
-}
+// The publishable key is baked in at build time via NEXT_PUBLIC_*.
+// During Docker build, Coolify may inject a placeholder or unresolved variable.
+// We sanitise it here: strip any non-ASCII characters to prevent the SDK's
+// initClient from throwing "Cannot convert argument to a ByteString" when it
+// tries to set the HTTP header x-publishable-api-key.
+const rawKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || ""
+// eslint-disable-next-line no-control-regex
+const publishableKey = rawKey.replace(/[^\x00-\x7F]/g, "")
 
 export const sdk = new Medusa({
   baseUrl: MEDUSA_BACKEND_URL,
   debug: process.env.NODE_ENV === "development",
-  publishableKey: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+  publishableKey: publishableKey || undefined,
 })
 
 const originalFetch = sdk.client.fetch.bind(sdk.client)
@@ -25,7 +34,7 @@ sdk.client.fetch = async <T>(
   try {
     localeHeader = await getLocaleHeader()
     headers["x-medusa-locale"] ??= localeHeader["x-medusa-locale"]
-  } catch {}
+  } catch { }
 
   const newHeaders = {
     ...localeHeader,
