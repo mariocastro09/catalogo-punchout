@@ -5,7 +5,9 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
-    databaseDriverOptions: process.env.NODE_ENV !== "production" ? {} : { connection: { ssl: { rejectUnauthorized: false } } },
+    // No SSL override — internal Docker networking (db container) does not use SSL.
+    // SSL mode is controlled via the DATABASE_URL query param (?sslmode=disable).
+    databaseDriverOptions: {},
     http: {
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
