@@ -14,8 +14,10 @@ RUN bun install --frozen-lockfile
 
 # ── Build ────────────────────────────────────────────────────
 FROM deps AS builder
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 COPY . .
-# 'medusa build' compiles everything into .medusa/server/
+# 'medusa build' compiles the server into .medusa/server and admin into .medusa/admin
 RUN bun run build
 
 # ── Production image ─────────────────────────────────────────
@@ -28,12 +30,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.medusa ./.medusa
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/static ./static
-# The Medusa CLI (db:migrate + start) always looks for medusa-config
-# at the project root. It uses @cspotcode/source-map-support to load
-# .ts files at runtime. tsconfig.json is needed for path resolution.
 COPY --from=builder /app/medusa-config.ts ./medusa-config.ts
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
-COPY --from=builder /app/package.json ./package.json
 
 # Add entrypoint script
 COPY docker-entrypoint.sh ./docker-entrypoint.sh
@@ -42,4 +40,5 @@ RUN chmod +x ./docker-entrypoint.sh
 EXPOSE 9000 7001
 
 ENTRYPOINT ["sh", "./docker-entrypoint.sh"]
+
 
