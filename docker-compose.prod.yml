@@ -1,10 +1,18 @@
 # ============================================================
 # docker-compose.prod.yml — Punchout B2B Catalog
-# Used by Coolify for production deployment.
-# DO NOT use dev volume bind-mounts here.
+# Coolify production deployment.
+#
+# · All SERVICE_FQDN_* variables are injected by Coolify.
+# · Services use 'expose' (not 'ports') — Coolify's Traefik
+#   reverse proxy handles all incoming HTTPS traffic.
+# · No source-code bind-mounts — built into the image.
 # ============================================================
 
 services:
+
+  # ────────────────────────────────────────────────────────────
+  # PostgreSQL 15 — Shared database for Medusa + FastAPI
+  # ────────────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: punchout-postgres
@@ -23,6 +31,9 @@ services:
       timeout: 5s
       retries: 5
 
+  # ────────────────────────────────────────────────────────────
+  # Redis — Medusa job queue & session cache
+  # ────────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     container_name: punchout-redis
@@ -37,6 +48,12 @@ services:
       timeout: 5s
       retries: 5
 
+  # ────────────────────────────────────────────────────────────
+  # MedusaJS — Commerce engine + Admin panel
+  # Public URL: https://${SERVICE_URL_MEDUSA}
+  #   · :9000 → Store API  (used by storefront & fastapi)
+  #   · :7001 → Admin UI   (Coolify routes this via Traefik)
+  # ────────────────────────────────────────────────────────────
   medusa:
     build:
       context: ./medusa
@@ -48,13 +65,16 @@ services:
       - "7001"
     environment:
       NODE_ENV: production
+      # DB — assembled from individual credentials
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
       REDIS_URL: redis://redis:6379
+      # Secrets
       JWT_SECRET: ${JWT_SECRET}
       COOKIE_SECRET: ${COOKIE_SECRET}
-      STORE_CORS: ${STORE_CORS}
-      ADMIN_CORS: ${ADMIN_CORS}
-      AUTH_CORS: ${AUTH_CORS}
+      # CORS — SERVICE_FQDN_* is the full https:// URL injected by Coolify
+      STORE_CORS: ${SERVICE_FQDN_STOREFRONT}
+      ADMIN_CORS: ${SERVICE_FQDN_MEDUSA}
+      AUTH_CORS: ${SERVICE_FQDN_STOREFRONT},${SERVICE_FQDN_MEDUSA},${SERVICE_FQDN_FASTAPI}
     depends_on:
       db:
         condition: service_healthy
@@ -67,8 +87,13 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s # Medusa takes time to migrate on first boot
 
+  # ────────────────────────────────────────────────────────────
+  # FastAPI — cXML/OCI Punchout middleware
+  # Public URL: https://${SERVICE_URL_FASTAPI}
+  # Swagger docs: https://${SERVICE_URL_FASTAPI}/docs
+  # ────────────────────────────────────────────────────────────
   fastapi:
     build:
       context: ./fastapi
@@ -78,9 +103,13 @@ services:
     expose:
       - "8000"
     environment:
+      # DB — same credentials, different driver prefix
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      # Internal URL (container-to-container, no TLS needed)
       MEDUSA_BACKEND_URL: http://medusa:9000
-      STOREFRONT_PUBLIC_URL: ${STOREFRONT_PUBLIC_URL}
+      # Public URL used in cXML PunchOut redirect responses
+      STOREFRONT_PUBLIC_URL: ${SERVICE_FQDN_STOREFRONT}
+      # Shared secrets
       JWT_SECRET: ${JWT_SECRET}
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
     depends_on:
@@ -89,14 +118,21 @@ services:
     networks:
       - punchout-network
 
+  # ────────────────────────────────────────────────────────────
+  # Next.js Storefront — B2B catalog UI
+  # Public URL: https://${SERVICE_URL_STOREFRONT}
+  # Note: NEXT_PUBLIC_* vars must be passed as build ARGs because
+  # Next.js bakes them into the JS bundle at build time.
+  # ────────────────────────────────────────────────────────────
   storefront:
     build:
       context: ./medusa-storefront
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${NEXT_PUBLIC_MEDUSA_BACKEND_URL}
+        # These are embedded into the frontend bundle during 'next build'
+        NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${SERVICE_FQDN_MEDUSA}
         NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
-        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+        NEXT_PUBLIC_BASE_URL: ${SERVICE_FQDN_STOREFRONT}
         NEXT_PUBLIC_DEFAULT_REGION: ${NEXT_PUBLIC_DEFAULT_REGION}
     container_name: punchout-storefront
     restart: unless-stopped
@@ -104,10 +140,11 @@ services:
       - "8000"
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${NEXT_PUBLIC_MEDUSA_BACKEND_URL}
-      MEDUSA_BACKEND_URL: http://medusa:9000
+      # Runtime env vars (for server-side rendering / API routes)
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${SERVICE_FQDN_MEDUSA}
+      MEDUSA_BACKEND_URL: http://medusa:9000 # Internal SSR calls (faster, no TLS)
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
-      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+      NEXT_PUBLIC_BASE_URL: ${SERVICE_FQDN_STOREFRONT}
       NEXT_PUBLIC_DEFAULT_REGION: ${NEXT_PUBLIC_DEFAULT_REGION}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
@@ -116,11 +153,17 @@ services:
     networks:
       - punchout-network
 
+# ────────────────────────────────────────────────────────────
+# Volumes — persisted across container restarts
+# ────────────────────────────────────────────────────────────
 volumes:
   postgres-data:
   redis-data:
 
-
+    # ────────────────────────────────────────────────────────────
+    # Network — all services communicate internally
+    # Coolify's Traefik sits outside this network for ingress
+    # ────────────────────────────────────────────────────────────
 networks:
   punchout-network:
     driver: bridge
