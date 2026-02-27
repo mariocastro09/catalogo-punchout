@@ -129,10 +129,12 @@ services:
       context: ./medusa-storefront
       dockerfile: Dockerfile
       args:
-        # These are embedded into the frontend bundle during 'next build'
-        NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${SERVICE_FQDN_MEDUSA}
+        # These are embedded into the frontend bundle during 'next build'.
+        # IMPORTANT: Use SERVICE_URL_* (hostname only) with explicit https:// prefix.
+        # Coolify passes SERVICE_FQDN_* WITHOUT https:// at build time → ERR_INVALID_URL.
+        NEXT_PUBLIC_MEDUSA_BACKEND_URL: https://${SERVICE_URL_MEDUSA}
         NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
-        NEXT_PUBLIC_BASE_URL: ${SERVICE_FQDN_STOREFRONT}
+        NEXT_PUBLIC_BASE_URL: https://${SERVICE_URL_STOREFRONT}
         NEXT_PUBLIC_DEFAULT_REGION: ${NEXT_PUBLIC_DEFAULT_REGION}
     container_name: punchout-storefront
     restart: unless-stopped
