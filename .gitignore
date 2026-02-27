@@ -4,6 +4,7 @@
 
 # ─── Environment & Secrets ───────────────────────────────────
 .env
+.anv
 .env.local
 .env.production
 .env.*.local
